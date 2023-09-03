@@ -1,2 +1,8 @@
 *.so
 *.o
+venv/
+.cache/
+compile_commands.json
+nyn-conf.json
+__pycache__
+svelte/public/build
