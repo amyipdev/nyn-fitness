@@ -1,8 +1,14 @@
-<script>
+<script lang="ts">
+	import { Styles, Button } from 'sveltestrap';
 	export let name;
 </script>
 
+<Styles />
+
 <main>
+	<div>
+		<Button outline color=danger>Test example bootstrap button</Button>
+	</div>
 	<h1>Hello {name}!</h1>
 	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
 </main>

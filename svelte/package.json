@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "sirv-cli": "^2.0.0",
+    "sveltestrap": "^5.11.2",
     "tslib": "^2.6.2"
   }
 }
