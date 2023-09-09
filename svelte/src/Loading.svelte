@@ -4,7 +4,7 @@
 <main>
     <div id="loading-div" class="d-flex align-items-center justify-content-center h-100">
         <div>
-            <img src="/svg/loading.svg" />
+            <img src="/svg/loading.svg" alt="Loading animation"/>
             <p>Loading...</p>
         </div>
     </div>
