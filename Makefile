@@ -1,3 +1,5 @@
+.PHONY: setup
+
 all:
 	$(MAKE) -C cpp
 	cd svelte; npx rollup -c
