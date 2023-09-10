@@ -26,7 +26,6 @@
 
 <svelte:head>
 	<title>{name}</title>
-	<html lang="en" />
 </svelte:head>
 
 <main>
