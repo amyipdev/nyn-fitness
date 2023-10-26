@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Styles, Button, Form, FormGroup, Label, Input } from 'sveltestrap';
-    import { loginCompleted } from "../stores.js";
+    import { loginCompleted, loginSelectionChoice } from "../stores.js";
     import Cookies from 'js-cookie';
     import { loginFetch } from "../loginAlgo.js";
 
@@ -39,7 +39,7 @@
         </FormGroup>
         <!-- TODO: forgot password link/view -->
         <FormGroup>
-            <Label for="form_login_password">Password</Label>
+            <Label for="form_login_password">Password (<a on:click={() => loginSelectionChoice.set(3)} href="javascript:void(0);">forgot?</a>)</Label>
             <Input type="password" id="form_login_password" bind:value={formLoginPassword} />
         </FormGroup>
         <!-- TODO: toggle checkbox for keep-me-logged-in -->
