@@ -1,17 +1,18 @@
 <script lang="ts">
-    import { Styles, Button } from 'sveltestrap';
+    import { Styles } from 'sveltestrap';
     import SelectionView from "./LoginMenus/Selection.svelte";
     import LoginCredsView from "./LoginMenus/LoginCreds.svelte";
+    import CreateAccountView from "./LoginMenus/CreateAccount.svelte";
     import { fade } from 'svelte/transition';
     import { SvelteComponent } from 'svelte';
     import { loginSelectionChoice } from "./stores.js";
 
-    const views = [SelectionView, LoginCredsView];
+    const views = [SelectionView, LoginCredsView, CreateAccountView];
 
-    let viewportComponent: SvelteComponent = null;
-	let currentView: integer = 0;
+    let viewportComponent: SvelteComponent | null = null;
+	let currentView: number = 0;
 
-	function toggleView(nv: integer) {
+	function toggleView(nv: number) {
         currentView = nv;
     }
 
@@ -19,9 +20,7 @@
         viewportComponent = views[currentView];
     }
 	updateViewportComponent();
-    loginSelectionChoice.subscribe((value) => {toggleView(value);})
-
-    //export let loginCompleted = false;
+    loginSelectionChoice.subscribe((value) => {toggleView(value);});
 </script>
 
 <Styles />

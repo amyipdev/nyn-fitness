@@ -6,15 +6,15 @@
 	import HomeView from './Home.svelte';
 	import LoadingView from './Loading.svelte';
 	import Cookies from 'js-cookie';
-	import {loginCompleted} from "./stores.js";
-	export let name;
+	import { loginCompleted } from "./stores.js";
+	export let name: string;
 
 	const views = [LoginView, HomeView, LoadingView];
 
-	let viewportComponent: SvelteComponent = null;
-	let currentView: integer = 2;
+	let viewportComponent: SvelteComponent | null = null;
+	let currentView: number = 2;
 
-	function toggleView(nv: integer) {
+	function toggleView(nv: number) {
 		currentView = nv;
 	}
 
@@ -23,26 +23,18 @@
 	}
 	updateViewportComponent();
 
-	function handleLogin() {
-		toggleView(0);
-
-		//loginCompleted.subscribe(() => {console.log("hhh"); toggleView(1)});
-	}
-	$: $loginCompleted && toggleView(1);
-
 	setTimeout(async function() {
-		let usr_tk: string = Cookies.get("nyn-user-tk");
+		let usr_tk: string | undefined = Cookies.get("nyn-user-tk");
 		if (usr_tk != undefined) {
-			console.log(usr_tk);
 			const tk_f = await fetch("/api/verify_token?" + new URLSearchParams({tk: usr_tk}));
 			const tk_fr = await tk_f.json();
-			tk_fr["status"] ? toggleView(1) : handleLogin();
+			toggleView(tk_fr["status"] ? 1 : 0);
 		} else {
-			console.log(usr_tk);
-			handleLogin();
+			toggleView(0);
 		}
-
 	}, 1250);
+	// TODO: evaluate turning this into a .subscribe inside a handleLogin() function
+	$: $loginCompleted && toggleView(1);
 </script>
 
 <Styles />
@@ -66,13 +58,6 @@
 		/*max-width: 320px;*/
 		margin: 0 auto;
 	}
-	/*
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}*/
 	/*
 	@media (min-width: 640px) {
 		main {

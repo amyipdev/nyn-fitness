@@ -1,29 +1,20 @@
 <script lang="ts">
     import { Styles, Button, Form, FormGroup, Label, Input } from 'sveltestrap';
-    import {loginCompleted} from "../stores.js";
+    import { loginCompleted } from "../stores.js";
     import Cookies from 'js-cookie';
-    let emsg = "";
-    let processingSubmission = false;
-    let formLoginUsername = "";
-    let formLoginPassword = "";
+    import { loginFetch } from "../loginAlgo.js";
+
+    let emsg: string = "";
+    let processingSubmission: boolean = false;
+    let formLoginUsername: string = "";
+    let formLoginPassword: string = "";
+
     async function submitForm() {
         processingSubmission = true;
-        const r = await fetch("/api/generate_token", {
-            method: "POST",
-            body: JSON.stringify({
-                usn: formLoginUsername,
-                pwd: formLoginPassword,
-                long: false
-            }),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        console.log(r.status);
-        switch (r.status) {
+        const r = await loginFetch(formLoginUsername, formLoginPassword, false);
+        switch (r[0]) {
             case 200:
-                const rj = await r.json();
-                Cookies.set("nyn-user-tk", rj["token"], {expires:7});
+                Cookies.set("nyn-user-tk", r[1], {expires:7});
                 loginCompleted.set(true);
                 break;
             case 403:
@@ -43,12 +34,12 @@
 <main>
     <Form>
         <FormGroup>
-            <Label for="username">Username</Label>
+            <Label for="form_login_username">Username</Label>
             <Input id="form_login_username" bind:value={formLoginUsername} />
         </FormGroup>
         <!-- TODO: forgot password link/view -->
         <FormGroup>
-            <Label for="password">Password</Label>
+            <Label for="form_login_password">Password</Label>
             <Input type="password" id="form_login_password" bind:value={formLoginPassword} />
         </FormGroup>
         <!-- TODO: toggle checkbox for keep-me-logged-in -->
