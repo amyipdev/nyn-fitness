@@ -24,6 +24,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "js-cookie": "^3.0.5",
     "sirv-cli": "^2.0.0",
     "sveltestrap": "^5.11.2",
     "tslib": "^2.6.2"
