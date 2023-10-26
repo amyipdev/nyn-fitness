@@ -15,7 +15,6 @@
 
 	function toggleView(nv: number) {
         currentView = nv;
-
     }
 
 	function updateViewportComponent() {

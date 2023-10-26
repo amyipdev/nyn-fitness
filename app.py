@@ -43,6 +43,8 @@ def api_verify_tokens():
 @app.route("/api/generate_token", methods=["POST"])
 def api_generate_token():
     rq = request.get_json()
+    if rq["usn"] == "" or rq["pwd"] == "":
+        return "Empty value supplied", 500
     conn = _gendbcon()
     curr = conn.cursor()
     curr.execute("select salt, user_uuid "
@@ -78,6 +80,8 @@ def api_generate_token():
 @app.route("/api/create_account", methods=["POST"])
 def api_create_account():
     rq = request.get_json()
+    if rq["dn"] == "" or rq["usn"] == "" or rq["pwd"] == "":
+        return "Empty value supplied", 500
     conn = _gendbcon()
     curr = conn.cursor()
     salt = secrets.token_hex(16)
