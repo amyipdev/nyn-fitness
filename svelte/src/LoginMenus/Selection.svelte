@@ -6,9 +6,9 @@
 <Styles />
 
 <main>
-    <Button color=secondary on:click={function() {loginSelectionChoice.set(2);}}>Create Account</Button>
+    <Button color=secondary on:click={() => {loginSelectionChoice.set(2); console.log(1);}}>Create Account</Button>
     <br>
-    <Button color=secondary on:click={function() {loginSelectionChoice.set(1);}}>Login</Button>
+    <Button color=secondary on:click={() => loginSelectionChoice.set(1)}>Login</Button>
 </main>
 
 <style>

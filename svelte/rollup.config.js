@@ -45,7 +45,11 @@ export default {
 				// enable run-time checks when not in production
 				dev: !production
 			},
-			preprocess: autoPreprocess()
+			preprocess: autoPreprocess(),
+			onwarn: (warning, handler) => {
+				if (warning.code === "a11y-invalid-attribute") return;
+				handler(warning);
+			}
 		}),
 		// we'll extract any component CSS out into
 		// a separate file - better for performance

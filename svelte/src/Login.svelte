@@ -21,7 +21,7 @@
         viewportComponent = views[currentView];
     }
 	updateViewportComponent();
-    loginSelectionChoice.subscribe((value) => {toggleView(value);});
+    loginSelectionChoice.subscribe((value) => toggleView(value));
 </script>
 
 <Styles />
