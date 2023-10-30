@@ -31,7 +31,7 @@
     <!-- recommend to use a bootstrap icon - perhaps even without a background - for the back button -->
     <!-- should also be fixed position; NYN logo to the left, back to the right -->
     {#if currentView != 0}
-        <Button on:click={() => toggleView(0)}>Back</Button>
+        <Button on:click={() => loginSelectionChoice.set(0)}>Back</Button>
     {/if}</h1>
     {#if viewportComponent == views[currentView]}
 		<div id="viewport" on:outroend={updateViewportComponent} transition:fade>
