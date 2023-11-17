@@ -13,3 +13,13 @@ create table tokens (
     primary key (token),
     foreign key (user_uuid) references user_info(user_uuid) on delete cascade
 );
+create table workouts (
+    wk_uuid varchar(36) unique not null,
+    wk_name text unique not null,
+    descr text not null,
+    ytlink text not null,
+    vect text not null,
+    catid int not null,
+    duration text not null,
+    primary key (wk_uuid)
+);

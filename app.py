@@ -8,6 +8,8 @@ import uuid
 from flask import Flask, redirect, send_from_directory, request, jsonify
 import mysql.connector
 
+from cpp import nyn_recommender
+
 # TODO: check cookies and redirect to login
 # TODO: API endpoints
 
