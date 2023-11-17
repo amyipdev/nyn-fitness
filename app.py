@@ -88,14 +88,52 @@ def api_create_account():
     curr = conn.cursor()
     salt = secrets.token_hex(16)
     phs = _hash_pwd(rq["pwd"], salt)
-    uid = uuid.uuid4()
+    uid = str(uuid.uuid4())
     curr.execute("insert into user_info "
                  "(displayname, password_hs, salt, username, user_uuid) "
                  "values "
                  "(%s, %s, %s, %s, %s);",
-                 (rq["dn"], phs, salt, rq["usn"], str(uid)))
+                 (rq["dn"], phs, salt, rq["usn"], uid))
+    curr.execute("insert into user_preferences "
+                 "(user_uuid, exp, dur, ins, wbr, sti, tbs,"
+                 "npl, rqt, wlf, ubf, lbf, fbf, cor, car, flx, bal) "
+                 "values "
+                 "(%s, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);",
+                 (uid,))
     conn.commit()
     return "true", 200
+
+
+# general recommmendations (catid or no catid)
+# NOT the For You box, Recently Completed, etc
+@app.route("/api/get_recommendations/general")
+def api_get_recommendations_general():
+    tk = request.args.get("tk")
+    cnt = int(request.args.get("cnt"))
+    catid = int(request.args.get("catid"))
+    uid = _verify_tokens(tk)
+    if uid == "":
+        return "Bad token", 403
+    conn = _gendbcon()
+    curr = conn.cursor()
+    curr.execute("select exp, dur, ins, wbr, sti, tbs, npl, "
+                 "rqt, wlf, ubf, lbf, fbf, cor, car, flx, bal "
+                 "from user_preferences "
+                 "where user_uuid = %s;",
+                 (uid,))
+    uvect_basis = curr.fetchall()[0]
+    uvect = nyn_recommender.gen_uv(list(uvect_basis))
+    if uvect is None:
+        return "Bad user vector", 500
+    curr.execute(f"select wk_uuid, wk_name, descr, ytlink, duration, vect "
+                 f"from workouts{' where catid = '+str(catid) if catid != -1 else ''};")
+    workouts = curr.fetchall()
+    cnt = min(cnt, len(workouts))
+    results = nyn_recommender.recommend(uvect,
+                                        [json.loads(s[5]) for s in workouts],
+                                        cnt)
+
+    return jsonify([workouts[i][:5] for i in results])
 
 
 def _gendbcon() -> mysql.connector.MySQLConnection:

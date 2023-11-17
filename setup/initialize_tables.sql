@@ -23,3 +23,23 @@ create table workouts (
     duration text not null,
     primary key (wk_uuid)
 );
+create table user_preferences (
+    user_uuid varchar(36) unique not null,
+    exp double not null,
+    dur double not null,
+    ins double not null,
+    wbr double not null,
+    sti double not null,
+    tbs double not null,
+    npl double not null,
+    rqt double not null,
+    wlf double not null,
+    ubf double not null,
+    lbf double not null,
+    fbf double not null,
+    cor double not null,
+    car double not null,
+    flx double not null,
+    bal double not null,
+    foreign key (user_uuid) references user_info(user_uuid) on delete cascade
+);

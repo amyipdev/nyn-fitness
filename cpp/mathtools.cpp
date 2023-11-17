@@ -25,6 +25,13 @@ f64 vectorMagnitude(f64 v[], u64 len) {
 
 void makeVectorUnitInPlace(f64 v[], u64 len) {
     f64 mag = vectorMagnitude(v, len);
+    // if |v| = 0, v = vec(0), score will be 0
+    // no division will affect it, but we are
+    // going to accidentally DBZ, causing segv
+    // to fix this, we just don't touch it if
+    // it's zero, because it doesn't matter
+    if (mag == 0) [[unlikely]]
+        return;
     for (u64 i = 0; i < len; ++i) {
         v[i] /= mag;  
     }
