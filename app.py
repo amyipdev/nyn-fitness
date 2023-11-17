@@ -5,7 +5,7 @@ import secrets
 import datetime
 import uuid
 
-from flask import Flask, redirect, send_from_directory, request, jsonify
+from flask import Flask, redirect, send_from_directory, request, jsonify, Response
 import mysql.connector
 
 from cpp import nyn_recommender
@@ -103,6 +103,9 @@ def api_create_account():
     conn.commit()
     return "true", 200
 
+# Can the Recommendations API get further deduped?
+# A lot of it is repetitive, but we also need the SQL
+# parameters to be adaptable, so this might be best
 
 # general recommmendations (catid or no catid)
 # NOT the For You box, Recently Completed, etc
@@ -115,25 +118,35 @@ def api_get_recommendations_general():
     if uid == "":
         return "Bad token", 403
     conn = _gendbcon()
-    curr = conn.cursor()
-    curr.execute("select exp, dur, ins, wbr, sti, tbs, npl, "
-                 "rqt, wlf, ubf, lbf, fbf, cor, car, flx, bal "
-                 "from user_preferences "
-                 "where user_uuid = %s;",
-                 (uid,))
-    uvect_basis = curr.fetchall()[0]
-    uvect = nyn_recommender.gen_uv(list(uvect_basis))
+    uvect = _getuv(conn, uid)
     if uvect is None:
         return "Bad user vector", 500
+    curr = conn.cursor()
     curr.execute(f"select wk_uuid, wk_name, descr, ytlink, duration, vect "
                  f"from workouts{' where catid = '+str(catid) if catid != -1 else ''};")
-    workouts = curr.fetchall()
-    cnt = min(cnt, len(workouts))
-    results = nyn_recommender.recommend(uvect,
-                                        [json.loads(s[5]) for s in workouts],
-                                        cnt)
+    return _process_workout_results(curr, uvect, cnt)
 
-    return jsonify([workouts[i][:5] for i in results])
+
+@app.route("/api/get_recommendations/fyp")
+def api_get_recommendations_fyp():
+    tk = request.args.get("tk")
+    cnt = int(request.args.get("cnt"))
+    uid = _verify_tokens(tk)
+    if uid == "":
+        return "Bad token", 403
+    conn = _gendbcon()
+    uvect = _getuv(conn, uid)
+    if uvect is None:
+        return "Bad user vector", 500
+    curr = conn.cursor()
+    curr.execute("select wk_uuid, wk_name, descr, ytlink, duration, vect "
+                 "from workouts "
+                 "where wk_uuid not in "
+                 "  (select wk_uuid "
+                 "   from workout_completed "
+                 "   where user_uuid = %s);",
+                 (uid,))
+    return _process_workout_results(curr, uvect, cnt)
 
 
 def _gendbcon() -> mysql.connector.MySQLConnection:
@@ -142,6 +155,25 @@ def _gendbcon() -> mysql.connector.MySQLConnection:
                                    host=config["database"]["host"],
                                    database=config["database"]["db"],
                                    port=config["database"]["port"])
+
+
+def _process_workout_results(curr, uvect: list[float], mcnt: int) -> Response:
+    workouts = curr.fetchall()
+    cnt = min(mcnt, len(workouts))
+    results = nyn_recommender.recommend(uvect,
+                                        [json.loads(s[5]) for s in workouts],
+                                        cnt)
+    return jsonify([workouts[i][:5] for i in results])
+
+def _getuv(conn: mysql.connector.MySQLConnection, uid: str) -> list:
+    curr = conn.cursor()
+    curr.execute("select exp, dur, ins, wbr, sti, tbs, npl, "
+                 "rqt, wlf, ubf, lbf, fbf, cor, car, flx, bal "
+                 "from user_preferences "
+                 "where user_uuid = %s;",
+                 (uid,))
+    uvect_basis = curr.fetchall()[0]
+    return nyn_recommender.gen_uv(list(uvect_basis))
 
 
 def _verify_tokens(token: str) -> str:

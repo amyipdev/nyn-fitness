@@ -43,3 +43,11 @@ create table user_preferences (
     bal double not null,
     foreign key (user_uuid) references user_info(user_uuid) on delete cascade
 );
+create table workout_completed (
+    user_uuid varchar(36) not null,
+    wk_uuid varchar(36) not null,
+    completion datetime not null,
+    foreign key (user_uuid) references user_info(user_uuid) on delete cascade,
+    foreign key (wk_uuid) references workouts(wk_uuid) on delete cascade,
+    primary key (user_uuid, wk_uuid)
+);
