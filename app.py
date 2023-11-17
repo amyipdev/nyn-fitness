@@ -164,8 +164,10 @@ def api_get_recommendations_recent():
                  "where wk_uuid in "
                  "  (select wk_uuid "
                  "   from workout_completed "
-                 "   where user_uuid = %s);",
-                 (uid,))
+                 "   where user_uuid = %s "
+                 "   order by completion desc) "
+                 "limit %s;",
+                 (uid, cnt))
     return jsonify(curr.fetchall())
 
 
