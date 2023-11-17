@@ -103,6 +103,7 @@ def api_create_account():
     conn.commit()
     return "true", 200
 
+
 # Can the Recommendations API get further deduped?
 # A lot of it is repetitive, but we also need the SQL
 # parameters to be adaptable, so this might be best
