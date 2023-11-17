@@ -77,16 +77,16 @@ static PyObject *recommend(PyObject *self, PyObject *args) {
     PyObject *matches; // workout unit vector matches
     Py_ssize_t count; // top n to return
     PyArg_ParseTuple(args, "OOn", &user, &matches, &count);
-    if (PyErr_Occurred()) {
+    if (PyErr_Occurred()) [[unlikely]] {
         CLEAN_EXIT;
     }
 
     f64 *uv = getCVector(user);
-    if (uv == nullptr) { CLEAN_EXIT; }
+    if (uv == nullptr) [[unlikely]] { CLEAN_EXIT; }
     std::deque<WorkoutSortable> pq;
     for (Py_ssize_t i = 0; i < PyList_Size(matches); ++i) {
         f64 *wv = getCVector(PyList_GetItem(matches, i));
-        if (wv == nullptr) { CLEAN_EXIT; }
+        if (wv == nullptr) [[unlikely]] { CLEAN_EXIT; }
         pq.push_back(WorkoutSortable(i, wv, uv));
         std::make_heap(pq.begin(), pq.end());
         if (static_cast<Py_ssize_t>(pq.size()) > count) [[likely]]
