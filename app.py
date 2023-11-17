@@ -110,7 +110,7 @@ def api_create_account():
 
 # general recommmendations (catid or no catid)
 # NOT the For You box, Recently Completed, etc
-@app.route("/api/get_recommendations/general")
+@app.route("/api/recommendations/general")
 def api_get_recommendations_general():
     tk = request.args.get("tk")
     cnt = int(request.args.get("cnt"))
@@ -128,7 +128,7 @@ def api_get_recommendations_general():
     return _process_workout_results(curr, uvect, cnt)
 
 
-@app.route("/api/get_recommendations/fyp")
+@app.route("/api/recommendations/fyp")
 def api_get_recommendations_fyp():
     tk = request.args.get("tk")
     cnt = int(request.args.get("cnt"))
@@ -150,6 +150,25 @@ def api_get_recommendations_fyp():
     return _process_workout_results(curr, uvect, cnt)
 
 
+@app.route("/api/recommendations/recent")
+def api_get_recommendations_recent():
+    tk = request.args.get("tk")
+    cnt = int(request.args.get("cnt"))
+    uid = _verify_tokens(tk)
+    if uid == "":
+        return "Bad token", 403
+    conn = _gendbcon()
+    curr = conn.cursor()
+    curr.execute("select wk_uuid, wk_name, descr, ytlink, duration "
+                 "from workouts "
+                 "where wk_uuid in "
+                 "  (select wk_uuid "
+                 "   from workout_completed "
+                 "   where user_uuid = %s);",
+                 (uid,))
+    return jsonify(curr.fetchall())
+
+
 def _gendbcon() -> mysql.connector.MySQLConnection:
     return mysql.connector.connect(user=config["database"]["user"],
                                    password=config["database"]["pwd"],
@@ -165,6 +184,7 @@ def _process_workout_results(curr, uvect: list[float], mcnt: int) -> Response:
                                         [json.loads(s[5]) for s in workouts],
                                         cnt)
     return jsonify([workouts[i][:5] for i in results])
+
 
 def _getuv(conn: mysql.connector.MySQLConnection, uid: str) -> list:
     curr = conn.cursor()
