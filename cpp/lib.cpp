@@ -3,23 +3,45 @@
 
 #include <cstddef>
 #include <iostream>
+#include <deque>
+#include <algorithm>
 
 #include "common.h"
 #include "mathtools.h"
 
 #define CN_ATTR 16
 
+class WorkoutSortable {
+    private:
+        Py_ssize_t id;
+        f64 score;
+    public:
+        WorkoutSortable(Py_ssize_t vid, f64 *w, f64 *u) {
+            id = vid;
+            score = dotProduct(w, u, CN_ATTR);
+        }
+        friend bool operator<(const WorkoutSortable &lhs,
+                              const WorkoutSortable rhs) {
+            return lhs.score < rhs.score;
+        }
+        Py_ssize_t getId() const {
+            return id;
+        }
+};
+
+#define CLEAN_EXIT PyErr_Clear(); Py_RETURN_NONE;
+
 // Throwing nullptr = bailing out
 static f64 *getCVector(PyObject *vec) {
-    if (PyList_Size(vec) != CN_ATTR)
+    if (PyList_Size(vec) != CN_ATTR) [[unlikely]]
         return nullptr;
     f64 *res = new f64[CN_ATTR];
     for (Py_ssize_t i = 0; i < CN_ATTR; ++i) {
         PyObject *item = PyList_GetItem(vec, i);
-        if (!PyFloat_Check(item))
+        if (!PyFloat_Check(item)) [[unlikely]]
             return nullptr;
         res[i] = PyFloat_AsDouble(item);
-        if (PyErr_Occurred()) {
+        if (PyErr_Occurred()) [[unlikely]] {
             delete[] res;
             return nullptr;
         }
@@ -34,25 +56,54 @@ static PyObject *getPythonVector(f64 *vec) {
     return v;
 }
 
-static PyObject *nyn_recommender_test(PyObject *self, PyObject *args) {
-    Py_RETURN_NONE;
+static PyObject *nyn_recommender_test(PyObject *self,
+                                      PyObject *args) {
+    CLEAN_EXIT;
 }
 
 static PyObject *fast_unit_vector(PyObject *self, PyObject *args) {
     PyObject *v;
     PyArg_ParseTuple(args, "O", &v);
     f64 *vec = getCVector(v);
-    if (vec == nullptr) {
-        PyErr_Clear();
-        Py_RETURN_NONE;
+    if (vec == nullptr) [[unlikely]] {
+        CLEAN_EXIT;
     }
     makeVectorUnitInPlace(vec, CN_ATTR);
     return getPythonVector(vec);
 }
 
+static PyObject *recommend(PyObject *self, PyObject *args) {
+    PyObject *user; // user preferences unit vector
+    PyObject *matches; // workout unit vector matches
+    Py_ssize_t count; // top n to return
+    PyArg_ParseTuple(args, "OOn", &user, &matches, &count);
+    if (PyErr_Occurred()) {
+        CLEAN_EXIT;
+    }
+
+    f64 *uv = getCVector(user);
+    if (uv == nullptr) { CLEAN_EXIT; }
+    std::deque<WorkoutSortable> pq;
+    for (Py_ssize_t i = 0; i < PyList_Size(matches); ++i) {
+        f64 *wv = getCVector(PyList_GetItem(matches, i));
+        if (wv == nullptr) { CLEAN_EXIT; }
+        pq.push_back(WorkoutSortable(i, wv, uv));
+        std::make_heap(pq.begin(), pq.end());
+        if (static_cast<Py_ssize_t>(pq.size()) > count) [[likely]]
+            pq.pop_back();
+    }
+
+    PyObject *ret = PyList_New(count);
+    Py_ssize_t i = 0;
+    for (WorkoutSortable &e : pq)
+        PyList_SetItem(ret, i++, PyLong_FromSsize_t(e.getId()));
+    return ret;
+}
+
 static PyMethodDef NYNMethods[] = {
     {"test", nyn_recommender_test, METH_VARARGS, "Test the module."},
     {"gen_uv", fast_unit_vector, METH_VARARGS, "Generate unit vector."},
+    {"recommend", recommend, METH_VARARGS, "Recommend videos."},
     {NULL, NULL, 0, NULL}
 };
 

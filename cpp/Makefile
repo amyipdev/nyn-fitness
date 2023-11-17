@@ -2,7 +2,7 @@ CC := gcc
 CXX := g++
 
 LIBS += $(shell pkg-config --cflags --libs python3)
-CFLAGS += -Wall -Werror -O3 -fPIC -march=native
+CFLAGS += -Wall -Werror -O3 -fPIC -march=native -std=gnu++20
 
 CXXSRCS=$(wildcard *.cpp)
 
