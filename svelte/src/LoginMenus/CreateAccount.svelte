@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Styles, Form, FormGroup, Label, Input, Button } from "sveltestrap";
+    import { Form, FormGroup, Label, Input, Button } from "sveltestrap";
     import { loginCompleted } from "../stores.js";
     import { loginFetch } from "../loginAlgo.js";
     import Cookies from 'js-cookie';
@@ -41,8 +41,6 @@
         processingSubmission = false;
     }
 </script>
-
-<Styles />
 
 <main>
     <Form>

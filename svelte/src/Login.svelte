@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Styles, Button } from 'sveltestrap';
+    import { Button } from 'sveltestrap';
     import SelectionView from "./LoginMenus/Selection.svelte";
     import LoginCredsView from "./LoginMenus/LoginCreds.svelte";
     import CreateAccountView from "./LoginMenus/CreateAccount.svelte";
@@ -23,8 +23,6 @@
 	updateViewportComponent();
     loginSelectionChoice.subscribe((value) => toggleView(value));
 </script>
-
-<Styles />
 
 <main>
     <h1>Login Page (navbar here)
