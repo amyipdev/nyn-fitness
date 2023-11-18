@@ -1,12 +1,13 @@
 <script lang="ts">
-    import type {GalleryWorkout} from "./GalleryWorkout.ts";
+    import type {GalleryWorkout} from "./GalleryWorkout.js";
     import { Container, Row, Col } from "sveltestrap";
+    import {currentWorkout,switchHomeMode} from '../stores.js';
     export let wk: GalleryWorkout;
 </script>
 
 <main>
     <!-- todo: make <a> into onclick, load workouts -->
-    <a>
+    <div on:click={() => {currentWorkout.set(wk);switchHomeMode.set(3);}}>
         <Container fluid class="p-2">
             <Row>
                 <Col><img class="img-fluid" alt="Thumbnail" src={`https://i.ytimg.com/vi/${wk[3].slice(-11)}/maxresdefault.jpg`}></Col>
@@ -19,7 +20,7 @@
                 <Col><p class="text-start text-truncate">{wk[2]}</p></Col>
             </Row>
         </Container>
-    </a>
+    </div>
 </main>
 
 <style>

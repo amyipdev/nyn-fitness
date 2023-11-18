@@ -171,6 +171,24 @@ def api_get_recommendations_recent():
     return jsonify(curr.fetchall())
 
 
+@app.route("/api/complete_workout", methods=["POST"])
+def api_complete_workout():
+    j = request.get_json()
+    uid = _verify_tokens(j.get("tk"))
+    if uid == "":
+        return "Bad token", 403
+    wk_uuid = j["wk_uuid"]
+    conn = _gendbcon()
+    curr = conn.cursor()
+    curr.execute("insert into workout_completed "
+                 "(user_uuid, wk_uuid, completion) "
+                 "values "
+                 "(%s, %s, now());",
+                 (uid, wk_uuid))
+    conn.commit()
+    return "200 OK", 200
+
+
 def _gendbcon() -> mysql.connector.MySQLConnection:
     return mysql.connector.connect(user=config["database"]["user"],
                                    password=config["database"]["pwd"],
