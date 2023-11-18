@@ -30,18 +30,15 @@
     <!-- should also be fixed position; NYN logo to the left, back to the right -->
     <!--<Navbar color="dark" dark>-->
     <div class="nyn-divcent mx-auto">
-        <Container md>
-            <h1><Image src="favicon.png" alt="Logo" style="height: 50px;" /><h1>NYN Fitness</h1></h1>
-
-            <h3>
-                {#if currentView != 0}
-                    <Button on:click={() => loginSelectionChoice.set(0)}>Back</Button>
-                {/if}
-            </h3>
+        <Container>
+            <img id="nyn-logo-img" src="favicon.png" alt="Logo" on:click={() => loginSelectionChoice.set(0)}>
+            <h1 class="text-light" id="nyn-login-text-brand" on:click={() => loginSelectionChoice.set(0)}>NYN Fitness</h1>
 
             {#if viewportComponent == views[currentView]}
                 <div id="viewport" on:outroend={updateViewportComponent} transition:fade>
-    	            <svelte:component this={viewportComponent}></svelte:component>
+                    <div class="nyn-login-switch mx-auto">
+    	               <svelte:component this={viewportComponent}></svelte:component>
+                    </div>
     		    </div>
     	    {/if}
         </Container>
@@ -52,18 +49,31 @@
 </main>
 
 <style>
-    /*.nyn-divcent {
-        transform: translateY(150%);
-    }*/
-    /*:global(body) {
-        background: linear-gradient(180deg, #1b1848, #3a1848);
-        margin: 0px;
-        padding: 0px;
-    }*/
-
-    /*.bg-container {
-        background: linear-gradient(to bottom, #493f82, #342b82);
-        margin: 0px;
-        padding: 200px;
-    }*/
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap');
+    .nyn-divcent {
+        display: flex;
+        align-items: center;
+        height: 90vh;
+    }
+    .nyn-login-switch {
+        max-width: 400px;
+    }
+    #nyn-login-text-brand {
+        font-size: 2rem;
+        text-decoration: none;
+        font-weight: 700;
+        font-family: 'Open Sans', sans-serif;
+        transition: font-size 0.5s;
+    }
+    #nyn-login-text-brand:hover {
+        font-size: 2.2rem;
+        text-decoration: underline;
+    }
+    #nyn-logo-img {
+        height: 84px;
+        transition: height 0.5s;
+    }
+    #nyn-logo-img:hover {
+        height: 96px;
+    }
 </style>
