@@ -1,28 +1,26 @@
 <script lang="ts">
     import type {GalleryWorkout} from "./GalleryWorkout.js";
     import GalleryItem from "./GalleryItem.svelte";
-    import {Container} from "sveltestrap";
+    import {Container, Row, Col} from "sveltestrap";
     export let wks: Array<GalleryWorkout>;
 </script>
 
-<main class="nyn-gallery-color w-auto">
+<main class="w-auto">
     <Container class="mx-auto px-1">
-        <div class="nyn-scrollable row overflow-x-scroll flex-nowrap w-auto p-2 mx-auto">
+        <Row class="overflow-x-scroll flex-nowrap w-auto p-2 mx-auto align-items-stretch">
             {#each wks as wko}
-                <div class="col">
-                    <GalleryItem wk={wko} />
-                </div>
+                <Col class="nyn-galcol-color">
+                    <div class="nyn-galcol-color h-100">
+                        <GalleryItem wk={wko} />
+                    </div>
+                </Col>
             {/each}
-        </div>
+        </Row>
     </Container>
 </main>
 
 <style>
-    .nyn-scrollable {
-        /*overflow-x: scroll;
-        white-space: nowrap;*/
-    }
-    .nyn-gallery-color {
-        background-color: #aa3333;
+    .nyn-galcol-color {
+        background-color: #555533;
     }
 </style>
