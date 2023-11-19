@@ -49,7 +49,6 @@
 </main>
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap');
     .nyn-divcent {
         display: flex;
         align-items: center;
