@@ -46,9 +46,9 @@
                             <h1 id="nyn-logo-home-txt" class="text-light">&nbsp;&nbsp;&nbsp;NYN Fitness</h1>
                         </div>
                     </Col>
-                    <div class="d-flex align-items-center justify-content-end">
+                    <div class="d-flex align-items-center justify-content-end me-5">
                         <Col xs="2">
-                            <i id="nyn-settings-button" class="bi bi-gear-fill me-5 pe-5"/>
+                            <i id="nyn-settings-button" class="bi bi-gear-fill"/>
                         </Col>
                     </div>
                 </div>
