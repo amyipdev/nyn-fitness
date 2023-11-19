@@ -48,7 +48,7 @@
                     </Col>
                     <div class="d-flex align-items-center justify-content-end">
                         <Col xs="2">
-                            <i id="nyn-settings-button" class="bi bi-gear-fill pe-4"/>
+                            <i id="nyn-settings-button" class="bi bi-gear-fill me-5 pe-5"/>
                         </Col>
                     </div>
                 </div>

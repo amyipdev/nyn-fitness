@@ -24,8 +24,8 @@
 </script>
 
 <main>
-    <h1 class="text-truncate text-center w-75 mx-auto">{$currentWorkout[1]}</h1>
-    <p class="text-center w-75 mx-auto">{$currentWorkout[2]}</p>
+    <h1 class="text-truncate text-center w-75 mx-auto os600 text-light">{$currentWorkout[1]}</h1>
+    <p class="text-center w-75 mx-auto os600">{$currentWorkout[2]}</p>
     <iframe title="YouTube" src={$currentWorkout[3]} frameborder="0" allowfullscreen allow="fullscreen; autoplay; web-share; picture-in-picture;"></iframe>
     <div>
         <Button secondary on:click={() => switchHomeMode.set(1)}>Cancel</Button>
@@ -34,6 +34,10 @@
 </main>
 
 <style>
+    .os600 {
+        font-family: "Open Sans", sans-serif;
+        font-weight: 600;
+    }
     iframe {
         aspect-ratio: 16 / 9 !important;
         max-height: 50vh;
