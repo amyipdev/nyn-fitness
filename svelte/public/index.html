@@ -10,7 +10,14 @@
 		<link rel='stylesheet' href='/global.css'>
 		<link rel='stylesheet' href='/build/bundle.css'>
 
+		<link rel="manifest" href="/manifest.json">
+
 		<script defer src='/build/bundle.js'></script>
+		<script>
+			if ('serviceWorker' in navigator) {
+				navigator.serviceWorker.register("/sw.js", {scope:"/"});
+			}
+		</script>
 	</head>
 
 	<body>

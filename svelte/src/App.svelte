@@ -76,7 +76,7 @@
         background: linear-gradient(180deg, #1b1848, #3a1848);
 		background-repeat: no-repeat;
 		background-attachment: fixed;
-        margin: 0px;
-        padding: 0px;
+        margin: 0;
+        padding: 0;
     }
 </style>

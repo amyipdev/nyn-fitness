@@ -1,0 +1,15 @@
+{
+    "lang": "en-us",
+    "name": "NYN Fitness",
+    "short_name": "NYN Fitness",
+    "description": "Fitness app with dynamic workout recommendations",
+    "start_url": "/",
+    "orientation": "any",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "/favicon.png",
+            "sizes": "256x256"
+        }
+    ]
+}
