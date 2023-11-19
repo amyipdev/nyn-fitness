@@ -73,9 +73,7 @@
 	}*/
 	:global(body) {
 		height: 100%;
-        background: linear-gradient(180deg, #1b1848, #3a1848);
-		background-repeat: no-repeat;
-		background-attachment: fixed;
+        background: linear-gradient(180deg, #1b1848, #3a1848) no-repeat fixed;
         margin: 0;
         padding: 0;
     }

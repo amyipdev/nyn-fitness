@@ -47,7 +47,7 @@ export default {
 			},
 			preprocess: autoPreprocess(),
 			onwarn: (warning, handler) => {
-				if (warning.code === "a11y-invalid-attribute") return;
+				if (["a11y-invalid-attribute","a11y-click-events-have-key-events"].includes(warning.code)) return;
 				handler(warning);
 			}
 		}),
