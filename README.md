@@ -179,9 +179,9 @@ have the ability to scale well to AVX-512 hardware.
 
 For assistance with NYN, contact Amy:
 
-Email: amy@amyip.net
-Matrix: https://matrix.to/#/@amyipdev1:matrix.org
-Fediverse: https://blahaj.zone/@amyipdev
-Instagram: https://instagram.com/amyipdev
+- Email: amy@amyip.net
+- Matrix: https://matrix.to/#/@amyipdev1:matrix.org
+- Fediverse: https://blahaj.zone/@amyipdev
+- Instagram: https://instagram.com/amyipdev
 
 You can also file an Issue.
