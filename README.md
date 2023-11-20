@@ -85,6 +85,7 @@ You can use the web version, or use a browser with PWA support to install as a P
 Prerequsites:
 - A MySQL or MariaDB database set up with the tables in the `setup` folder.
 - A Linux server with modern build tools (gcc/g++), Python 3, nodejs/npm, and Make.
+- (Optional) a Cron implementation (such as Cronie) that supports `@weekly`
 
 First, clone the repository:
 
@@ -103,6 +104,12 @@ Now, run the server (perhaps in a terminal multiplexer like `tmux`):
 
 ```sh
 ./run.sh
+```
+
+To keep your database size reasonable on large instances, install the crontab:
+
+```sh
+cron/insert-crontab.sh
 ```
 
 #### Adding workouts

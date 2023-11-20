@@ -25,29 +25,17 @@
 # License version 3 is available at, for your convenience,
 # https://www.gnu.org/licenses/agpl-3.0.en.html.
 
-.PHONY: setup dist cron
+cd "$(dirname "$0")"
+BASEDIR=$(pwd)
+crontab -l
 
-all:
-	$(MAKE) -C cpp
-	cd svelte; npx rollup -c
-	
-clean:
-	rm -rf venv/ compile_commands.json .cache/ __pycache__/
-	$(MAKE) -C cpp clean
+if ! crontab -l; then
+    touch crontab.tmp;
+    crontab crontab.tmp;
+    rm crontab.tmp;
+fi
 
-cdb:
-	$(MAKE) | compiledb -p-
-
-setup:
-	python3 -m venv venv
-	venv/bin/pip3 install -r requirements.txt
-	cd svelte; npm i
-
-test:
-	$(MAKE) -C tests
-
-dist:
-	dist/generate-distribution.sh
-	
-cron:
-	cron/insert-crontabs.sh
+echo "@weekly $BASEDIR/../venv/bin/python3 $BASEDIR/clear-cookies.py" > crontab-partial.tmp
+crontab -l | cat - crontab-partial.tmp > crontab.tmp
+crontab crontab.tmp
+rm crontab-partial.tmp crontab.tmp

@@ -25,29 +25,21 @@
 # License version 3 is available at, for your convenience,
 # https://www.gnu.org/licenses/agpl-3.0.en.html.
 
-.PHONY: setup dist cron
+import json
+import os
 
-all:
-	$(MAKE) -C cpp
-	cd svelte; npx rollup -c
-	
-clean:
-	rm -rf venv/ compile_commands.json .cache/ __pycache__/
-	$(MAKE) -C cpp clean
+import mysql.connector
 
-cdb:
-	$(MAKE) | compiledb -p-
+config = json.load(open(f"{os.path.dirname(__file__)}/../nyn-conf.json", "r"))
+db = mysql.connector.connect(user=config["database"]["user"],
+                             password=config["database"]["pwd"],
+                             host=config["database"]["host"],
+                             database=config["database"]["db"],
+                             port=config["database"]["port"])
 
-setup:
-	python3 -m venv venv
-	venv/bin/pip3 install -r requirements.txt
-	cd svelte; npm i
-
-test:
-	$(MAKE) -C tests
-
-dist:
-	dist/generate-distribution.sh
-	
-cron:
-	cron/insert-crontabs.sh
+curr = db.cursor()
+curr.execute("delete from tokens "
+             "where curdate() > expiry_date;")
+db.commit()
+curr.close()
+db.close()

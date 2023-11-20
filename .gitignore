@@ -6,3 +6,4 @@ compile_commands.json
 nyn-conf.json
 __pycache__
 svelte/public/build
+*.tmp
