@@ -117,3 +117,64 @@ python3 setup/input_workouts.py
 
 NYN currently does not ship with SSL. However, you can use a reverse proxy
 (we recommend NGINX) to enable SSL support with free certificates from Let's Encrypt.
+
+## Contributing
+
+To report bugs, use the Issues tab. To submit changes (which will be under AGPLv3),
+use the Pull Requests tab. To report security vulnerabilities, email amy@amyip.net.
+
+## Licensing/Credits
+
+This project was made by Amy Parker, Nicholas Goulart, Kevin Ramirez, Theresa Nguyen,
+Srinidhi Chevvuri, and Dat Lam. © Copyright 2023.
+
+NYN is licensed under the AGPLv3. You can view the license in the LICENSE file.
+
+Credits go out to the following libraries/toolchains/frameworks used in NYN:
+
+Bootstrap, Sveltestrap, Svelte, Electron, TypeScript, CPython/libpython,
+RabbitHoleSyndrome's Portable Windows Electron-Forge Maker, Electron Forge,
+js-cookie, jq, Flask, MySQL Connector Python.
+
+## Motivation
+
+NYN is the Fall 2023 term project for the aforementioned authors in Swayam Pati's CPSC 362
+at California State University, Fullerton. This does not dispel the copyrights
+retained by the individual authors, who retain sole copyright and all rights
+as expressed under the AGPLv3.
+
+We chose to make a fitness tracking/workouts app to help promote health and fitness
+on campus, as we found many of the existing solutions (like Sworkit) to
+not meet the needs of the CSU Fullerton community. NYN is also one of the few
+content-based solutions to be 100% free (as in freedom) software.
+
+The name comes from our inability to find a name; NYN is short for "not yet named".
+The acronym eventually stuck due to its palindromic nature.
+
+We also used this opportunity to learn frameworks we previously had no experience
+with, like libpython and Svelte. These ended up being critical to the project.
+Svelte has saved signficant amounts of development time, and contributes heavily
+to incredible site performance, even on low-performing machines. By writing our
+mathematical code in C++, we were able to reduce total API latency across the
+entire stack (including network latency!) to an average of 7ms, even for recommendation
+requests; in fact, the average non-database-hitting request takes up 4ms, and
+the average database-hitting request takes 5ms, meaning processing the entire workout
+database to generate recommendations only takes ~2ms of additional processing time!
+(Times were measured on a Ryzen 7 7700X, real deployments may be on a 3700X or less)
+
+Optimization has been a critical part of the project. Our current infrastructure
+uses AVX2 to optimize vector computations for recommendations; most of our mathematical
+code gets executed as straight AVX2 instructions with no interruptions that could
+cause speculative execution misses to occur. Given the size of our vectors, we also
+have the ability to scale well to AVX-512 hardware.
+
+## Help/Assistance
+
+For assistance with NYN, contact Amy:
+
+Email: amy@amyip.net
+Matrix: https://matrix.to/#/@amyipdev1:matrix.org
+Fediverse: https://blahaj.zone/@amyipdev
+Instagram: https://instagram.com/amyipdev
+
+You can also file an Issue.
