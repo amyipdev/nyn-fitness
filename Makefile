@@ -18,3 +18,6 @@ setup:
 
 test:
 	$(MAKE) -C tests
+
+dist:
+	dist/generate-distribution.sh
