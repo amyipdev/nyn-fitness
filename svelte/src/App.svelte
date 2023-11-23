@@ -33,12 +33,13 @@ https://www.gnu.org/licenses/agpl-3.0.en.html.
 	import LoginView from './Login.svelte';
 	import HomeView from './Home.svelte';
 	import LoadingView from './Loading.svelte';
-	import ViewWorkout from './ViewWorkout.svelte'
+	import ViewWorkout from './ViewWorkout.svelte';
+	import SettingsView from './Settings.svelte'
 	import Cookies from 'js-cookie';
 	import { loginCompleted, switchHomeMode } from "./stores.js";
 	export let name: string;
 
-	const views = [LoginView, HomeView, LoadingView, ViewWorkout];
+	const views = [LoginView, HomeView, LoadingView, ViewWorkout, SettingsView];
 
 	let viewportComponent: SvelteComponent | null = null;
 	let currentView: number = 2;

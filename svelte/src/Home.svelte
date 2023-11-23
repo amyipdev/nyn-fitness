@@ -30,8 +30,9 @@ https://www.gnu.org/licenses/agpl-3.0.en.html.
     import Cookies from 'js-cookie';
     import Gallery from "./GalleryComponents/Gallery.svelte";
     import type {GalleryWorkout} from "./GalleryComponents/GalleryWorkout.js";
-    import {Container,Row,Col,Icon} from "sveltestrap";
-    
+    import {Container,Row,Col} from "sveltestrap";
+    import {switchHomeMode} from "./stores.js";
+
     const CNT: number = 10;
 
     let usr_tk: string = Cookies.get("nyn-user-tk");
@@ -76,7 +77,7 @@ https://www.gnu.org/licenses/agpl-3.0.en.html.
                     </Col>
                     <div class="d-flex align-items-center justify-content-end me-5">
                         <Col xs="2">
-                            <i id="nyn-settings-button" class="bi bi-gear-fill"/>
+                            <i on:click={() => switchHomeMode.set(4)} id="nyn-settings-button" class="bi bi-gear-fill"/>
                         </Col>
                     </div>
                 </div>
