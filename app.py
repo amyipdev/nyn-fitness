@@ -216,6 +216,41 @@ def api_complete_workout():
     return "200 OK", 200
 
 
+@app.route("/api/settings/get")
+def api_settings_get():
+    tk = request.args.get("tk")
+    uid = _verify_tokens(tk)
+    if uid == "":
+        return "Bad token", 403
+    conn = _gendbcon()
+    curr = conn.cursor()
+    curr.execute("select * "
+                 "from user_preferences "
+                 "where user_uuid = %s;",
+                 (uid,))
+    return jsonify(curr.fetchall()[0][1:])
+
+
+@app.route("/api/settings/set", methods=["POST"])
+def api_settings_set():
+    j = request.get_json()
+    uid = _verify_tokens(j[16])
+    if uid == "":
+        return "Bad token", 403
+    j[16] = uid
+    conn = _gendbcon()
+    curr = conn.cursor()
+    curr.execute("update user_preferences "
+                 "set exp = %s, dur = %s, ins = %s, wbr = %s, "
+                 "    sti = %s, tbs = %s, npl = %s, rqt = %s, "
+                 "    wlf = %s, ubf = %s, lbf = %s, fbf = %s, "
+                 "    cor = %s, flx = %s, bal = %s, car = %s "
+                 "where user_uuid = %s;",
+                 j)
+    conn.commit()
+    return "200 OK", 200
+
+
 def _gendbcon() -> mysql.connector.MySQLConnection:
     return mysql.connector.connect(user=config["database"]["user"],
                                    password=config["database"]["pwd"],

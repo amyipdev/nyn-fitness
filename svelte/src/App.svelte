@@ -66,6 +66,7 @@ https://www.gnu.org/licenses/agpl-3.0.en.html.
 	// TODO: evaluate turning this into a .subscribe inside a handleLogin() function
 	$: $loginCompleted && toggleView(1);
 	$: $switchHomeMode && toggleView($switchHomeMode);
+	$: $switchHomeMode == 0 && toggleView(0);
 </script>
 
 <Styles />

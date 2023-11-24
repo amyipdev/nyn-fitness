@@ -1,13 +1,45 @@
 <script lang="ts">
     import {Button} from "sveltestrap";
-    import {switchHomeMode} from "./stores.js";
+    import {switchHomeMode,loginCompleted,loginSelectionChoice} from "./stores.js";
+    import Cookies from "js-cookie";
     // all values should be submitted as one list [v0,v1,...]
     // later, use this list (user_uuid concat on end) for mysql
     async function handleSettingsSubmission() {
-        alert("Not implemented yet!");
+        let vec = [box0c];
+        for (let i = 1; i < 16; ++i) {
+            vec.push(document.getElementById(`nyn-settings-${i}`).value);
+        }
+        vec.push(Cookies.get("nyn-user-tk"));
+        const r = await fetch("/api/settings/set", {
+            method: "POST",
+            body: JSON.stringify(vec),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        if (r.status != 200) {
+            console.log("Settings save failure");
+            alert("Settings not saved, an error occurred!");
+        }
         switchHomeMode.set(1);
     }
-    let box0c: number = 2;
+    let box0c: number = 0;
+    async function setSliderValues() {
+        let usr_tk = Cookies.get("nyn-user-tk");
+        let vect_rs = await fetch("/api/settings/get?" + new URLSearchParams({tk: usr_tk}));
+        let vect = await vect_rs.json();
+        box0c = vect[0];
+        for (let i = 1; i < 16; ++i) {
+            document.getElementById(`nyn-settings-${i}`).value = vect[i];
+        }
+    }
+    setSliderValues();
+    function logOut() {
+        Cookies.remove("nyn-user-tk");
+        loginCompleted.set(false);
+        loginSelectionChoice.set(0);
+        switchHomeMode.set(0);
+    }
 </script>
 
 <main>
@@ -17,15 +49,15 @@
         <p>Experience level</p>
         <div class="d-flex justify-content-between">
             <div>
-                <Button color=light outline={box0c != 0} on:click={() => box0c = 0} class="rounded-circle"><i class="bi bi-stars nyn-fs-xem"></i></Button>
+                <Button color=light outline={box0c != -6} on:click={() => box0c = -6} class="rounded-circle"><i class="bi bi-stars nyn-fs-xem"></i></Button>
                 <p class="nyn-exp-text">Beginner</p>
             </div>
             <div>
-                <Button color=light outline={box0c != 1} on:click={() => box0c = 1} class="rounded-circle"><i class="bi bi-star nyn-fs-xem"></i></Button>
+                <Button color=light outline={box0c != -3} on:click={() => box0c = -3} class="rounded-circle"><i class="bi bi-star nyn-fs-xem"></i></Button>
                 <p class="nyn-exp-text">Novice</p>
             </div>    
             <div>    
-                <Button color=light outline={box0c != 2} on:click={() => box0c = 2} class="rounded-circle"><i class="bi bi-star-half nyn-fs-xem"></i></Button>
+                <Button color=light outline={box0c != 0} on:click={() => box0c = 0} class="rounded-circle"><i class="bi bi-star-half nyn-fs-xem"></i></Button>
                 <p class="nyn-exp-text">Intermediate</p>
             </div>
             <div>    
@@ -33,7 +65,7 @@
                 <p class="nyn-exp-text">Advanced</p>
             </div>
             <div>    
-                <Button color=light outline={box0c != 4} on:click={() => box0c = 4} class="rounded-circle"><i class="bi bi-moon-stars-fill nyn-fs-xem"></i></Button>
+                <Button color=light outline={box0c != 6} on:click={() => box0c = 6} class="rounded-circle"><i class="bi bi-moon-stars-fill nyn-fs-xem"></i></Button>
                 <p class="nyn-exp-text">Pro</p>
             </div>    
         </div>
@@ -62,8 +94,8 @@
         <label for="nyn-settings-4" class="form-label">Strength-increasing</label>
         <input type="range" class="form-range border-0" id="nyn-settings-4" min="-2" max="2" step="0.02">
         <div class="d-flex justify-content-between">
-            <div class="text-start">unimportant</div>
-            <div class="text-end">important</div>
+            <div class="text-start">minimal focus</div>
+            <div class="text-end">active pursuit</div>
         </div>
         <br /><br />
         <label for="nyn-settings-5" class="form-label">Team-based exercises</label>
@@ -90,14 +122,63 @@
         <label for="nyn-settings-8" class="form-label">Weight loss focus</label>
         <input type="range" class="form-range border-0" id="nyn-settings-8" min="-2" max="2" step="0.02">
         <div class="d-flex justify-content-between">
-            <div class="text-start">unimportant</div>
-            <div class="text-end">important</div>
+            <div class="text-start">minimal focus</div>
+            <div class="text-end">active pursuit</div>
+        </div>
+        <br /><br />
+        <label for="nyn-settings-9" class="form-label">Upper body focus</label>
+        <input type="range" class="form-range border-0" id="nyn-settings-9" min="-1" max="1" step="0.01">
+        <div class="d-flex justify-content-between">
+            <div class="text-start">minimal focus</div>
+            <div class="text-end">active pursuit</div>
+        </div>
+        <br /><br />
+        <label for="nyn-settings-10" class="form-label">Lower body focus</label>
+        <input type="range" class="form-range border-0" id="nyn-settings-10" min="-1" max="1" step="0.01">
+        <div class="d-flex justify-content-between">
+            <div class="text-start">minimal focus</div>
+            <div class="text-end">active pursuit</div>
+        </div>
+        <br /><br />
+        <label for="nyn-settings-11" class="form-label">Full body focus</label>
+        <input type="range" class="form-range border-0" id="nyn-settings-11" min="-1" max="1" step="0.01">
+        <div class="d-flex justify-content-between">
+            <div class="text-start">minimal focus</div>
+            <div class="text-end">active pursuit</div>
+        </div>
+        <br /><br />
+        <label for="nyn-settings-12" class="form-label">Core focus</label>
+        <input type="range" class="form-range border-0" id="nyn-settings-12" min="-1" max="1" step="0.01">
+        <div class="d-flex justify-content-between">
+            <div class="text-start">minimal focus</div>
+            <div class="text-end">active pursuit</div>
+        </div>
+        <br /><br />
+        <label for="nyn-settings-13" class="form-label">Cardio focus</label>
+        <input type="range" class="form-range border-0" id="nyn-settings-13" min="-1" max="1" step="0.01">
+        <div class="d-flex justify-content-between">
+            <div class="text-start">minimal focus</div>
+            <div class="text-end">active pursuit</div>
+        </div>
+        <br /><br />
+        <label for="nyn-settings-14" class="form-label">Flexibility focus</label>
+        <input type="range" class="form-range border-0" id="nyn-settings-14" min="-1" max="1" step="0.01">
+        <div class="d-flex justify-content-between">
+            <div class="text-start">minimal focus</div>
+            <div class="text-end">active pursuit</div>
+        </div>
+        <br /><br />
+        <label for="nyn-settings-15" class="form-label">Balance focus</label>
+        <input type="range" class="form-range border-0" id="nyn-settings-15" min="-1" max="1" step="0.01">
+        <div class="d-flex justify-content-between">
+            <div class="text-start">minimal focus</div>
+            <div class="text-end">active pursuit</div>
         </div>
     </div>
     <br />
     <Button on:click={handleSettingsSubmission}>Save preferences</Button>
     <br /><br />
-    <Button color=danger disabled>Log out</Button>
+    <Button color=danger on:click={logOut}>Log out</Button>
 </main>
 
 <style>

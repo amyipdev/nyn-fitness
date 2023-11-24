@@ -58,7 +58,6 @@ https://www.gnu.org/licenses/agpl-3.0.en.html.
         const jsons = responses.map((resp) => resp.json());
         const ldat = await Promise.all(jsons);
         ldat.forEach((d) => dat.push(d));
-        console.log(dat);
         loaded = true;
     }
     setValues();
