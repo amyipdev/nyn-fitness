@@ -23,7 +23,7 @@ you have the right to receive the source code behind any NYN deployment.
 
 ### End Users
 
-We maintain a deployment of NYN at https://main.dev362.amyip.net. You can simply log
+We maintain a deployment of NYN at https://nyn.amyip.net. You can simply log
 into that instance to use NYN!
 
 If you want an app version:
