@@ -32,6 +32,7 @@ const createWindow = () => {
         width: 1024,
         height: 576,
         autoHideMenuBar: true,
+        icon: "favicon.png"
     });
     win.loadFile("index.html");
 }

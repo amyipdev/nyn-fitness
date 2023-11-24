@@ -28,28 +28,44 @@
 module.exports = {
   packagerConfig: {
     asar: true,
+    icon: "favicon"
   },
   rebuildConfig: {},
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: {},
+      config: {
+      },
     },
     {
       name: '@electron-forge/maker-zip',
       platforms: ['darwin'],
+      config: {
+
+      },
     },
     {
       name: '@electron-forge/maker-deb',
-      config: {},
+      config: {
+        options: {
+          icon: "favicon.png"
+        }
+      },
     },
     {
       name: '@electron-forge/maker-rpm',
-      config: {},
+      config: {
+        options: {
+          icon: "favicon.png"
+        }
+      },
     },
     {
       name: '@rabbitholesyndrome/electron-forge-maker-portable',
-      platforms: ['win32']
+      platforms: ['win32'],
+      config: {
+
+      },
     }
   ],
   plugins: [
