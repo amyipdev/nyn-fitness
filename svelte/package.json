@@ -9,23 +9,23 @@
     "start": "sirv public --no-clear"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^24.0.0",
+    "@rollup/plugin-commonjs": "^29.0.3",
     "@rollup/plugin-node-resolve": "^15.0.0",
-    "@rollup/plugin-terser": "^0.4.0",
+    "@rollup/plugin-terser": "^1.0.0",
     "@rollup/plugin-typescript": "^11.1.3",
     "@tsconfig/svelte": "^5.0.2",
     "@types/js-cookie": "^3.0.5",
-    "rollup": "^3.15.0",
+    "rollup": "^3.30.0",
     "rollup-plugin-css-only": "^4.3.0",
     "rollup-plugin-livereload": "^2.0.0",
     "rollup-plugin-svelte": "^7.1.6",
-    "svelte": "^3.55.0",
-    "svelte-check": "^3.5.1",
-    "svelte-preprocess": "^5.0.4",
+    "svelte": "^5.55.7",
+    "svelte-check": "^4.7.3",
+    "svelte-preprocess": "^6.0.5",
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "js-cookie": "^3.0.5",
+    "js-cookie": "^3.0.7",
     "sirv-cli": "^2.0.0",
     "sveltestrap": "^5.11.2",
     "tslib": "^2.6.2"
