@@ -21,6 +21,12 @@ you have the right to receive the source code behind any NYN deployment.
 
 ## Installation
 
+> [!NOTE]
+> Due to loss of the NYN database of over 300 categorized workout videos,
+> the live NYN deployment has been shut down. The information pertaining to that
+> deployment in this README is kept for historical purposes and to inform anyone
+> who might wish to revive the project in the future.
+
 ### End Users
 
 We maintain a deployment of NYN at https://nyn.amyip.net. You can simply log
@@ -181,7 +187,7 @@ For assistance with NYN, contact Amy:
 
 - Email: amy@amyip.net
 - Matrix: https://matrix.to/#/@amyipdev1:matrix.org
-- Fediverse: https://blahaj.zone/@amyipdev
+- Fediverse: https://transfem.social/@amyipdev
 - Instagram: https://instagram.com/amyipdev
 
 You can also file an Issue.
